@@ -3,13 +3,13 @@ library(lme4)
 library(gtools)
 
 file<-as.numeric(Sys.getenv("SGE_TASK_ID"))
-f_path=paste("/home/glastonc/reads/F/EB_F_scaled_expr_",file,".txt",sep="")
+f_path=paste("EB_F_scaled_expr_",file,".txt",sep="")
 rna_seq=read.table(f_path,head=T,sep="\t",stringsAsFactors=F)
-eigen_vector<-read.table("~/FileMatrixQTL/FilesMatrixQTL/F/dosages/output/eurobats.eigen.eigenU.txt",head=F)
+eigen_vector<-read.table("eigen.eigenU.txt",head=F)
 eigen_vector=eigen_vector[,716:720]
 
 not_diabetic=read.table("~/not_diabetic.IDs",head=T,sep="\t",stringsAsFactors=F)
-covs=read.table("~/../DTR/Expression/EUROBATS/Counts/qc_F_freezev1.txt",head=T,sep="\t",stringsAsFactors=F)
+covs=read.table("qc_F_freezev1.txt",head=T,sep="\t",stringsAsFactors=F)
 row.names(eigen_vector)=covs$SampleID
 eigen_vector=eigen_vector[row.names(eigen_vector) %in% not_diabetic[,2],]
 not_diabetic$BiopsyDate=as.POSIXct(not_diabetic$BiopsyDate,format="%d/%m/%Y")
@@ -30,13 +30,13 @@ index=mixedorder(covs$SampleID)
 covs=covs[index,]
 
 
-  family <- as.factor(as.matrix(covs['Family'])) # This is coded with the family ID.
-  zygosity <- as.factor(as.matrix(covs['Zygosity'])) #  Same number for MZ twins (family ID),  for DZ twins (twin ID + 00000)
+  family <- as.factor(as.matrix(covs['Family']))
+  zygosity <- as.factor(as.matrix(covs['Zygosity']))
   INSERT_SIZE_MODE <- as.numeric(as.matrix(covs['INSERT_SIZE_MODE']))
   GC_mean <- as.numeric(as.matrix(covs['GC_mean']))
   PrimerIndex <- as.factor(as.matrix(covs['PrimerIndex']))
   age <- as.numeric(as.matrix(covs['AGE']))
-# batch <- as.factor(as.matrix(covs['Set'])) # ONLY BLOOD HAS BATCH EFFECT
+# batch <- as.factor(as.matrix(covs['Set']))
   BMI <- as.numeric(as.matrix(covs['BMI']))
 
 t=NULL
